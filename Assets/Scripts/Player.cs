@@ -5,7 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 3.5f;
+    private float _speed = 5f;
+    [SerializeField]
+    private float _speedMultiplier = 2;
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
@@ -48,15 +50,15 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
+        Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+
         if (_isSpeedBoostActive)
         {
-            transform.Translate(Vector3.right * horizontalInput * _speed * 2 * Time.deltaTime);
-            transform.Translate(Vector3.up * verticalInput * _speed * 2 * Time.deltaTime);
+            transform.Translate(direction * ( _speed * _speedMultiplier ) * Time.deltaTime);
         }
         else
         {
-            transform.Translate(Vector3.right * horizontalInput * _speed * Time.deltaTime);
-            transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
+            transform.Translate(direction * _speed * Time.deltaTime);
         }
 
         if(transform.position.y >= 0)
