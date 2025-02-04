@@ -28,14 +28,24 @@ public class Player : MonoBehaviour
     private bool _isShieldActive = false;
     [SerializeField]
     private GameObject shieldVisualizer;
+    [SerializeField]
+    private int _score;
+
+    private UIManager _uiManager;
 
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (_spawnManager == null)
         {
             Debug.LogError("The Spawn Manager is NULL.");
+        }
+
+        if (_uiManager == null)
+        {
+            Debug.LogError("The UI Manager is NULL.");
         }
     }
 
@@ -96,14 +106,6 @@ public class Player : MonoBehaviour
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
-        if(_isTripleShotActive)
-        {
-            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
-        }
-        else
-        {
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
-        }
     }
 
     public void Damage()
@@ -125,6 +127,7 @@ public class Player : MonoBehaviour
 
     public void TripleShotActive()
     {
+        StopCoroutine(TripleShotPowerDownRoutine());
         _isTripleShotActive = true;
         StartCoroutine(TripleShotPowerDownRoutine());
     }
@@ -136,6 +139,7 @@ public class Player : MonoBehaviour
     }
 
     public void SpeedBoostActive(){
+        StopCoroutine(SpeedBoostPowerDownRoutine());
         _isSpeedBoostActive = true;
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
@@ -150,6 +154,12 @@ public class Player : MonoBehaviour
     {
         _isShieldActive = true;
         shieldVisualizer.SetActive(true);
+    }
+
+    public void AddScore(int points)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score);
     }
 
 }
