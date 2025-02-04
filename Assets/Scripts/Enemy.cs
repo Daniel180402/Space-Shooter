@@ -25,7 +25,6 @@ public class Enemy : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("OnTriggerEnter2D called with tag: " + other.tag);
         if (other.tag == "Player")
         {
             Player player = other.transform.GetComponent<Player>();
