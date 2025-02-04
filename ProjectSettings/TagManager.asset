@@ -46,6 +46,9 @@ TagManager:
   - name: Background
     uniqueID: 2097795529
     locked: 0
+  - name: Shiels
+    uniqueID: 358917881
+    locked: 0
   - name: Foreground
     uniqueID: 3439021529
     locked: 0
