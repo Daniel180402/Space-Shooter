@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
-    private GameObject _tripleShotPrefab;
+    private GameObject _speedBoostPrefab;
     [SerializeField]
     private float _fireRate = .5f;
     private float _canFire = -1f;
@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     [SerializeField]
     private bool _isTripleShotActive = false;
+    [SerializeField]
+    private bool _isSpeedBoostActive = false;
 
     void Start()
     {
@@ -46,8 +48,16 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        transform.Translate(Vector3.right * horizontalInput * _speed * Time.deltaTime);
-        transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
+        if (_isSpeedBoostActive)
+        {
+            transform.Translate(Vector3.right * horizontalInput * _speed * 2 * Time.deltaTime);
+            transform.Translate(Vector3.up * verticalInput * _speed * 2 * Time.deltaTime);
+        }
+        else
+        {
+            transform.Translate(Vector3.right * horizontalInput * _speed * Time.deltaTime);
+            transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
+        }
 
         if(transform.position.y >= 0)
         {
@@ -112,15 +122,14 @@ public class Player : MonoBehaviour
         _isTripleShotActive = false;
     }
 
-    public void TripleShotActive()
-    {
-        _isTripleShotActive = true;
-        StartCoroutine(TripleShotPowerDownRoutine());
+    public void SpeedBoostActive(){
+        _isSpeedBoostActive = true;
+        StartCoroutine(SpeedBoostPowerDownRoutine());
     }
 
-    IEnumerator TripleShotPowerDownRoutine()
+    IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
-        _isTripleShotActive = false;
+        _isSpeedBoostActive = false;
     }
 }
